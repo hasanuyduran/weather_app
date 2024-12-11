@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import Days_weather from './Days_weather';
 
 const Hava = () => {
     const [data, setData] = useState([]);
@@ -12,7 +13,8 @@ const Hava = () => {
     const [min , setMin] = useState('');
     const [max , setMax] = useState('');
     const [date, setDate] = useState(new Date().toLocaleDateString());
-    const [time, setTime] = useState(new Date().toLocaleTimeString().slice(0,5));
+    const [time, setTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' ,hour12: false }))
+    const [result, setResult] = useState([]);
     function getWeather(cityName) {
         const url = `https://api.collectapi.com/weather/getWeather?data.lang=tr&data.city=${cityName}`;
         axios.get(url, {
@@ -31,6 +33,7 @@ const Hava = () => {
           setMin(Math.floor(response.data.result[0].min).toString() + "°C");
           setMax(Math.floor(response.data.result[0].max).toString() + "°C");
           setDate(response.data.result[0].date);
+          setResult(response.data.result);
         })
         .catch(error => {
           console.error('Hata:', error);
@@ -42,18 +45,18 @@ const Hava = () => {
     }, []);
     console.log("şehir adi",cityName);
 
+    
 
-    return <div>
-      <div>
-        <label className="text-3xl">İl Adı:</label>
-        <input value={cityName} className="bg-blue-400  text-3xl" type="text"  onChange={(e) => setCityName(e.target.value)} />
-        <button className="text-3xl bg-blue-500" onClick={() => getWeather(cityName)}>Getir</button>
-        <h1 className="text-3xl">{desc}</h1>
+
+    return <div className='h-screen' style={{
+      backgroundImage: 'url("https://images.unsplash.com/photo-1419833173245-f59e1b93f9ee?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+    }}>
+      <div className='flex justify-end'>
+        <label className="text-3xl mt-6 text-white bg-[rgba(0,0,0,0.28)]">İl Adı:</label>
+        <input value={cityName} className="mt-6 bg-[rgba(0,0,0,0.28)] text-white text-3xl" type="text"  onChange={(e) => setCityName(e.target.value)} />
+        <button className="text-3xl text-white mt-6 bg-[rgb(59,158,56)]" onClick={() => getWeather(cityName)}>Getir</button>
       </div>
-      <div className='flex flex-col w-full h-screen justify-center items-center text-white ]' 
-      style={{
-        backgroundImage: 'url("https://images.unsplash.com/photo-1419833173245-f59e1b93f9ee?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
-      }}>
+      <div className='flex flex-col w-full mt-20 justify-center items-center text-white ]'>
         <div className='flex justify-between items-center w-1/2 p-5 bg-[rgba(0,0,0,0.28)] rounded-t-2xl'> 
           <div className='flex justify-start w-1/3'>
             <h1 className="text-8xl ">{temp}</h1>
@@ -79,73 +82,11 @@ const Hava = () => {
           </div>
         </div>
         <div className='flex justify-between px-5 py-2 bg-[rgba(0,0,0,0.28)] w-1/2 mt-5 rounded-2xl'>
-          <div className='flex-col justify-center items-center'>
-            <div className='w-full flex justify-center'>
-              <img src="https://cdnydm.com/permedia/fji5nQfowvEYJBdnLsvrgA.png?size=512x512" alt="weather" className='w-1/3' />
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>SAL</p>
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>10° | 10°</p>
-            </div>
+          <div className='flex justify-center items-center'>
+            {result.map((item) => (
+              <Days_weather key={item.date} icon={item.icon} min={Math.floor(item.min).toString() + "°C"} max={Math.floor(item.max).toString() + "°C"} date={item.day} />
+            ))}
           </div>
-          <div className='flex-col justify-center items-center'>
-            <div className='w-full flex justify-center'>
-              <img src="https://cdnydm.com/permedia/fji5nQfowvEYJBdnLsvrgA.png?size=512x512" alt="weather" className='w-1/3' />
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>SAL</p>
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>10° | 10°</p>
-            </div>
-          </div>
-          <div className='flex-col justify-center items-center'>
-            <div className='w-full flex justify-center'>
-              <img src="https://cdnydm.com/permedia/fji5nQfowvEYJBdnLsvrgA.png?size=512x512" alt="weather" className='w-1/3' />
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>SAL</p>
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>10° | 10°</p>
-            </div>
-          </div>
-          <div className='flex-col justify-center items-center'>
-            <div className='w-full flex justify-center'>
-              <img src="https://cdnydm.com/permedia/fji5nQfowvEYJBdnLsvrgA.png?size=512x512" alt="weather" className='w-1/3' />
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>SAL</p>
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>10° | 10°</p>
-            </div>
-          </div>
-          <div className='flex-col justify-center items-center'>
-            <div className='w-full flex justify-center'>
-              <img src="https://cdnydm.com/permedia/fji5nQfowvEYJBdnLsvrgA.png?size=512x512" alt="weather" className='w-1/3' />
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>SAL</p>
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>10° | 10°</p>
-            </div>
-          </div>
-          <div className='flex-col justify-center items-center'>
-            <div className='w-full flex justify-center'>
-              <img src="https://cdnydm.com/permedia/fji5nQfowvEYJBdnLsvrgA.png?size=512x512" alt="weather" className='w-1/3' />
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>SAL</p>
-            </div>
-            <div className='w-full flex justify-center'>
-              <p>10° | 10°</p>
-            </div>
-          </div>
-      
         </div>
       </div>
     </div>;
