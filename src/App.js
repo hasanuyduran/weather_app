@@ -1,10 +1,12 @@
-
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Routers from './Routers';
 
 function App() {
   return (
-    <Routers />
+    <BrowserRouter>  {/* BrowserRouter burada, yalnızca bir kere olmalı */}
+      <Routers />
+    </BrowserRouter>
   );
 }
 
